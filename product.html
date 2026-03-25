@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product — TechNova</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Breadcrumb */
+        .product-breadcrumb {
+            padding: 20px 0;
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .product-breadcrumb a { color: var(--blue-500); }
+        .product-breadcrumb a:hover { color: var(--navy-800); }
+        .product-breadcrumb .sep { color: var(--gray-300); font-size: 0.7rem; }
+
+        /* Product Detail */
+        .product-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            padding-bottom: 60px;
+        }
+        .product-gallery {
+            position: relative;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            aspect-ratio: 1;
+        }
+        .product-gallery img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .product-gallery:hover img { transform: scale(1.15); }
+        .product-gallery .product-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            z-index: 2;
+            color: var(--white);
+        }
+        .product-badge.hot { background: var(--accent-red); }
+        .product-badge.sale { background: var(--accent-orange); }
+        .product-badge.new { background: var(--accent-green); }
+        .zoom-hint {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.5);
+            color: var(--white);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .product-info { display: flex; flex-direction: column; gap: 20px; }
+        .product-info .product-category {
+            display: inline-block;
+            background: var(--blue-500);
+            color: var(--white);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            width: fit-content;
+        }
+        .product-info h1 { font-size: 2rem; font-weight: 800; color: var(--navy-800); line-height: 1.2; }
+        .product-rating { display: flex; align-items: center; gap: 10px; }
+        .product-rating .card-stars { font-size: 1rem; color: var(--gold); }
+        .product-rating .card-stars .empty { color: var(--gray-300); }
+        .product-rating span { font-size: 0.9rem; color: var(--gray-500); }
+        .product-price-block { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+        .product-price-block .current {
+            font-family: 'Space Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--blue-500);
+        }
+        .product-price-block .original {
+            font-size: 1.1rem;
+            color: var(--gray-400);
+            text-decoration: line-through;
+        }
+        .product-price-block .discount-tag {
+            background: var(--accent-red);
+            color: var(--white);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        .product-description { font-size: 1rem; color: var(--gray-600); line-height: 1.7; }
+        .product-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+        .qty-selector {
+            display: flex;
+            align-items: center;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+        .qty-selector button {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+            background: var(--gray-50);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .qty-selector button:hover { background: var(--blue-500); color: var(--white); }
+        .qty-selector input {
+            width: 52px;
+            height: 44px;
+            text-align: center;
+            border: none;
+            border-left: 2px solid var(--gray-200);
+            border-right: 2px solid var(--gray-200);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .btn-add-cart {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 32px;
+            background: var(--blue-500);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .btn-add-cart:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 4px 20px rgba(37,99,235,0.4); }
+        .btn-wishlist {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: 1.1rem;
+            color: var(--gray-500);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .btn-wishlist:hover { border-color: var(--accent-red); color: var(--accent-red); }
+        .btn-wishlist.active { background: var(--accent-red); color: var(--white); border-color: var(--accent-red); }
+
+        .product-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-top: 16px;
+            border-top: 1px solid var(--gray-200);
+            font-size: 0.9rem;
+            color: var(--gray-500);
+        }
+        .product-meta strong { color: var(--gray-700); }
+
+        /* Tabs */
+        .product-tabs-section {
+            padding: 0 0 60px;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 4px;
+            border-bottom: 2px solid var(--gray-200);
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 14px 28px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--gray-500);
+            border: none;
+            background: none;
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+            transition: color var(--transition);
+        }
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--blue-500);
+            border-radius: 3px 3px 0 0;
+            transform: scaleX(0);
+            transition: transform var(--transition);
+        }
+        .tab-btn.active { color: var(--blue-500); }
+        .tab-btn.active::after { transform: scaleX(1); }
+        .tab-btn:hover { color: var(--blue-500); }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+        .tab-panel p { color: var(--gray-600); line-height: 1.8; margin-bottom: 14px; }
+
+        /* Specs table */
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .specs-table tr { border-bottom: 1px solid var(--gray-100); }
+        .specs-table td {
+            padding: 12px 16px;
+            font-size: 0.95rem;
+        }
+        .specs-table td:first-child {
+            font-weight: 600;
+            color: var(--navy-800);
+            width: 200px;
+            background: var(--gray-50);
+        }
+
+        /* Reviews */
+        .review-item {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        .review-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+        .review-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--blue-500);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .review-meta { flex: 1; }
+        .review-meta strong { display: block; font-size: 0.95rem; color: var(--navy-800); }
+        .review-meta span { font-size: 0.8rem; color: var(--gray-400); }
+        .review-stars { font-size: 0.85rem; color: var(--gold); }
+        .review-text { color: var(--gray-600); font-size: 0.95rem; line-height: 1.6; margin-top: 6px; }
+
+        /* Related */
+        .related-section {
+            padding: 60px 0 80px;
+            background: var(--gray-50);
+        }
+        .related-section .section-title { font-size: 1.6rem; font-weight: 800; color: var(--navy-800); margin-bottom: 24px; text-align: center; }
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .product-detail { grid-template-columns: 1fr; gap: 24px; }
+            .product-info h1 { font-size: 1.5rem; }
+            .product-price-block .current { font-size: 1.5rem; }
+            .tab-btn { padding: 10px 16px; font-size: 0.85rem; }
+            .specs-table td:first-child { width: 120px; }
+            .related-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container">
+        <div class="product-breadcrumb" id="product-breadcrumb"></div>
+        <section class="product-detail animate-on-scroll" id="product-detail"></section>
+    </div>
+
+    <section class="product-tabs-section animate-on-scroll">
+        <div class="container" id="product-tabs"></div>
+    </section>
+
+    <section class="related-section animate-on-scroll">
+        <div class="container">
+            <h2 class="section-title">Related Products</h2>
+            <div class="related-grid" id="related-grid"></div>
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+    <script src="shared.js"></script>
+    <script>
+    (function() {
+        const params = new URLSearchParams(window.location.search);
+        const productId = parseInt(params.get('id'));
+        const product = allProducts.find(p => p.id === productId);
+
+        if (!product) {
+            document.getElementById('product-detail').innerHTML = `
+                <div style="grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--gray-500)">
+                    <i class="fas fa-exclamation-circle" style="font-size:3rem;margin-bottom:16px;color:var(--gray-300)"></i>
+                    <h2 style="color:var(--navy-800);margin-bottom:8px">Product Not Found</h2>
+                    <p>The product you're looking for doesn't exist or has been removed.</p>
+                    <a href="shop.html" class="btn btn-primary" style="margin-top:20px">Browse All Products</a>
+                </div>`;
+            return;
+        }
+
+        document.title = `${product.name} — TechNova`;
+
+        const discount = product.originalPrice > product.price ? Math.round((1 - product.price / product.originalPrice) * 100) : 0;
+
+        // Breadcrumb
+        document.getElementById('product-breadcrumb').innerHTML = `
+            <a href="index.html">Home</a>
+            <span class="sep"><i class="fas fa-chevron-right"></i></span>
+            <a href="shop.html">Shop</a>
+            <span class="sep"><i class="fas fa-chevron-right"></i></span>
+            <a href="shop.html?cat=${product.category}">${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</a>
+            <span class="sep"><i class="fas fa-chevron-right"></i></span>
+            <span style="color:var(--gray-800);font-weight:500">${product.name}</span>
+        `;
+
+        // Product Detail
+        document.getElementById('product-detail').innerHTML = `
+            <div class="product-gallery">
+                ${product.badge ? `<span class="product-badge ${product.badge}">${product.badge}</span>` : ''}
+                <img src="${product.image}" alt="${product.name}" id="product-img">
+                <span class="zoom-hint"><i class="fas fa-search-plus"></i> Hover to zoom</span>
+            </div>
+            <div class="product-info">
+                <span class="product-category">${product.category}</span>
+                <h1>${product.name}</h1>
+                <div class="product-rating">
+                    <div class="card-stars">${renderStars(product.rating)}</div>
+                    <span>${product.rating} (${product.reviews} reviews)</span>
+                </div>
+                <div class="product-price-block">
+                    <span class="current">${formatPrice(product.price)}</span>
+                    ${product.originalPrice > product.price ? `<span class="original">${formatPrice(product.originalPrice)}</span><span class="discount-tag">-${discount}%</span>` : ''}
+                </div>
+                <p class="product-description">${product.description}</p>
+                <div class="product-actions">
+                    <div class="qty-selector">
+                        <button id="qty-minus">-</button>
+                        <input type="number" id="detail-qty" value="1" min="1" max="10">
+                        <button id="qty-plus">+</button>
+                    </div>
+                    <button class="btn-add-cart" id="btn-add-cart"><i class="fas fa-plus"></i> Add to Cart</button>
+                    <button class="btn-wishlist" id="btn-wishlist" title="Add to Wishlist"><i class="fas fa-heart"></i></button>
+                </div>
+                <div class="product-meta">
+                    <div><strong>Brand:</strong> ${product.brand}</div>
+                    <div><strong>Category:</strong> ${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</div>
+                    <div><strong>Availability:</strong> <span style="color:var(--accent-green);font-weight:600">In Stock</span></div>
+                    <div><strong>SKU:</strong> TN-${String(product.id).padStart(5, '0')}</div>
+                </div>
+            </div>
+        `;
+
+        // Tabs
+        const specsHtml = product.specs ? Object.entries(product.specs).map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('') : '<tr><td colspan="2">No specifications available</td></tr>';
+
+        const sampleReviews = [
+            { name: 'Adebayo O.', initial: 'A', rating: 5, date: '2 weeks ago', text: 'Absolutely love this product! The quality is outstanding and it arrived well-packaged. Highly recommend for anyone looking for premium tech.' },
+            { name: 'Chioma N.', initial: 'C', rating: 4, date: '1 month ago', text: 'Great product overall. Performs exactly as described. Only minor complaint is the shipping took a bit longer than expected, but worth the wait.' },
+            { name: 'Emeka I.', initial: 'E', rating: 5, date: '1 month ago', text: 'Best purchase I\'ve made this year. The build quality is top notch and it works flawlessly. TechNova never disappoints!' },
+        ];
+
+        document.getElementById('product-tabs').innerHTML = `
+            <div class="tab-buttons">
+                <button class="tab-btn active" data-tab="description">Description</button>
+                <button class="tab-btn" data-tab="specifications">Specifications</button>
+                <button class="tab-btn" data-tab="reviews">Reviews (${product.reviews})</button>
+            </div>
+            <div class="tab-panel active" id="tab-description">
+                <p>${product.description}</p>
+                <p>Experience cutting-edge technology designed to elevate your daily life. This product combines premium build quality with advanced features, making it a top choice for tech enthusiasts across Nigeria. Backed by our comprehensive warranty and dedicated customer support.</p>
+            </div>
+            <div class="tab-panel" id="tab-specifications">
+                <table class="specs-table">${specsHtml}</table>
+            </div>
+            <div class="tab-panel" id="tab-reviews">
+                ${sampleReviews.map(r => `
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div class="review-avatar">${r.initial}</div>
+                            <div class="review-meta">
+                                <strong>${r.name}</strong>
+                                <span>${r.date}</span>
+                            </div>
+                            <div class="review-stars">${renderStars(r.rating)}</div>
+                        </div>
+                        <p class="review-text">${r.text}</p>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
+        // Related Products
+        const related = allProducts.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+        document.getElementById('related-grid').innerHTML = related.map((p, i) => renderProductCard(p, i)).join('');
+
+        // Events
+        document.getElementById('qty-minus').addEventListener('click', () => {
+            const inp = document.getElementById('detail-qty');
+            inp.value = Math.max(1, +inp.value - 1);
+        });
+        document.getElementById('qty-plus').addEventListener('click', () => {
+            const inp = document.getElementById('detail-qty');
+            inp.value = Math.min(10, +inp.value + 1);
+        });
+        document.getElementById('btn-add-cart').addEventListener('click', () => {
+            const qty = +document.getElementById('detail-qty').value || 1;
+            addToCart(product.id, qty);
+        });
+        document.getElementById('btn-wishlist').addEventListener('click', function() {
+            toggleWishlist(product.id);
+            this.classList.toggle('active', wishlist.includes(product.id));
+        });
+
+        // Wishlist initial state
+        if (wishlist.includes(product.id)) {
+            document.getElementById('btn-wishlist').classList.add('active');
+        }
+
+        // Tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Image zoom on hover
+        const gallery = document.querySelector('.product-gallery');
+        const img = document.getElementById('product-img');
+        gallery.addEventListener('mousemove', function(e) {
+            const rect = gallery.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            img.style.transformOrigin = `${x}% ${y}%`;
+        });
+
+        initScrollAnimations();
+    })();
+    </script>
+</body>
+</html>

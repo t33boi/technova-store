@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Blog — TechNova Nigeria</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ---- Blog Hero ---- */
+        .blog-hero {
+            background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 50%, var(--blue-500) 100%);
+            padding: 80px 0 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .blog-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .blog-hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 12px;
+        }
+        .blog-hero .breadcrumb {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: var(--gray-300);
+            font-size: 0.95rem;
+        }
+        .blog-hero .breadcrumb a { color: var(--electric); text-decoration: none; transition: var(--transition); }
+        .blog-hero .breadcrumb a:hover { color: var(--white); }
+
+        /* ---- Blog Layout ---- */
+        .blog-layout {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 40px;
+            padding: 60px 0 80px;
+        }
+        @media (max-width: 1024px) {
+            .blog-layout { grid-template-columns: 1fr; }
+        }
+
+        /* ---- Blog Grid ---- */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        @media (max-width: 700px) {
+            .blog-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ---- Blog Card ---- */
+        .blog-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .blog-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+
+        .blog-card-image {
+            position: relative;
+            overflow: hidden;
+            height: 220px;
+        }
+        .blog-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .blog-card:hover .blog-card-image img { transform: scale(1.08); }
+
+        .blog-card-category {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: var(--blue-500);
+            color: var(--white);
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .blog-card-body {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .blog-card-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 0.82rem;
+            color: var(--gray-500);
+            margin-bottom: 12px;
+        }
+        .blog-card-meta i { margin-right: 4px; color: var(--blue-400); }
+        .blog-card-body h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--navy-800);
+            margin-bottom: 10px;
+            line-height: 1.4;
+            transition: color var(--transition);
+        }
+        .blog-card:hover .blog-card-body h3 { color: var(--blue-500); }
+
+        .blog-card-excerpt {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+            line-height: 1.65;
+            margin-bottom: 20px;
+            flex: 1;
+        }
+        .read-more-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--blue-500);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+            transition: gap var(--transition), color var(--transition);
+        }
+        .read-more-btn:hover { gap: 12px; color: var(--navy-800); }
+        .read-more-btn i { font-size: 0.8rem; transition: transform var(--transition); }
+        .read-more-btn:hover i { transform: translateX(3px); }
+
+        /* ---- Blog Card Expanded Content ---- */
+        .blog-card-full {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, padding 0.4s ease;
+            padding: 0 24px;
+            color: var(--gray-600);
+            font-size: 0.92rem;
+            line-height: 1.75;
+        }
+        .blog-card-full.expanded {
+            max-height: 600px;
+            padding: 0 24px 24px;
+        }
+        .blog-card-full p { margin-bottom: 12px; }
+        .blog-card-full .close-article {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--accent-red);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 8px 0 0;
+            transition: var(--transition);
+        }
+        .blog-card-full .close-article:hover { color: var(--navy-800); }
+
+        /* ---- Sidebar ---- */
+        .blog-sidebar { display: flex; flex-direction: column; gap: 30px; }
+
+        .sidebar-widget {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .sidebar-widget h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--navy-800);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--gray-100);
+            position: relative;
+        }
+        .sidebar-widget h4::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--blue-500);
+        }
+
+        /* Search Widget */
+        .sidebar-search {
+            display: flex;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            transition: border-color var(--transition);
+        }
+        .sidebar-search:focus-within { border-color: var(--blue-500); }
+        .sidebar-search input {
+            flex: 1;
+            border: none;
+            padding: 12px 16px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            background: transparent;
+        }
+        .sidebar-search button {
+            border: none;
+            background: var(--blue-500);
+            color: var(--white);
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background var(--transition);
+        }
+        .sidebar-search button:hover { background: var(--navy-700); }
+
+        /* Categories Widget */
+        .category-list { list-style: none; }
+        .category-list li { border-bottom: 1px solid var(--gray-100); }
+        .category-list li:last-child { border: none; }
+        .category-list a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 11px 0;
+            color: var(--gray-600);
+            text-decoration: none;
+            font-size: 0.92rem;
+            transition: color var(--transition), padding-left var(--transition);
+        }
+        .category-list a:hover { color: var(--blue-500); padding-left: 8px; }
+        .category-list .cat-count {
+            background: var(--gray-100);
+            padding: 2px 10px;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--gray-500);
+        }
+
+        /* Recent Posts Widget */
+        .recent-post {
+            display: flex;
+            gap: 14px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        .recent-post:last-child { border: none; }
+        .recent-post-img {
+            width: 72px;
+            height: 56px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .recent-post-img img { width: 100%; height: 100%; object-fit: cover; }
+        .recent-post-info h5 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--navy-800);
+            line-height: 1.4;
+            margin-bottom: 4px;
+            transition: color var(--transition);
+            cursor: pointer;
+        }
+        .recent-post-info h5:hover { color: var(--blue-500); }
+        .recent-post-info span {
+            font-size: 0.75rem;
+            color: var(--gray-400);
+        }
+
+        /* Newsletter Widget */
+        .newsletter-widget {
+            background: linear-gradient(135deg, var(--navy-900), var(--navy-700));
+            color: var(--white);
+        }
+        .newsletter-widget h4 { color: var(--white); border-bottom-color: rgba(255,255,255,0.1); }
+        .newsletter-widget h4::after { background: var(--electric); }
+        .newsletter-widget p { font-size: 0.88rem; color: var(--gray-300); margin-bottom: 18px; line-height: 1.6; }
+        .newsletter-form input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid rgba(255,255,255,0.15);
+            border-radius: var(--radius-md);
+            background: rgba(255,255,255,0.05);
+            color: var(--white);
+            font-family: inherit;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            outline: none;
+            transition: border-color var(--transition);
+        }
+        .newsletter-form input::placeholder { color: var(--gray-400); }
+        .newsletter-form input:focus { border-color: var(--electric); }
+        .newsletter-form button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: var(--radius-md);
+            background: var(--blue-500);
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: background var(--transition), transform var(--transition);
+        }
+        .newsletter-form button:hover { background: var(--electric); transform: translateY(-2px); }
+
+        /* ---- Animations ---- */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .animate-on-scroll.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<div id="header-placeholder"></div>
+
+<!-- Blog Hero -->
+<section class="blog-hero">
+    <div class="container">
+        <h1>Tech Blog</h1>
+        <div class="breadcrumb">
+            <a href="index.html">Home</a>
+            <i class="fas fa-chevron-right" style="font-size:0.7rem"></i>
+            <span>Blog</span>
+        </div>
+    </div>
+</section>
+
+<!-- Blog Content -->
+<section class="container">
+    <div class="blog-layout">
+
+        <!-- Blog Grid -->
+        <div>
+            <div class="blog-grid" id="blog-grid"></div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="blog-sidebar">
+            <!-- Search -->
+            <div class="sidebar-widget animate-on-scroll">
+                <h4><i class="fas fa-search" style="margin-right:8px;color:var(--blue-400)"></i>Search</h4>
+                <div class="sidebar-search">
+                    <input type="text" placeholder="Search articles..." id="blog-search-input">
+                    <button id="blog-search-btn"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="sidebar-widget animate-on-scroll">
+                <h4><i class="fas fa-folder" style="margin-right:8px;color:var(--blue-400)"></i>Categories</h4>
+                <ul class="category-list">
+                    <li><a href="#">Smartphones <span class="cat-count">12</span></a></li>
+                    <li><a href="#">Laptops <span class="cat-count">9</span></a></li>
+                    <li><a href="#">Audio & Sound <span class="cat-count">7</span></a></li>
+                    <li><a href="#">Cameras <span class="cat-count">5</span></a></li>
+                    <li><a href="#">Wearables <span class="cat-count">8</span></a></li>
+                    <li><a href="#">Tips & Guides <span class="cat-count">15</span></a></li>
+                    <li><a href="#">Industry News <span class="cat-count">11</span></a></li>
+                </ul>
+            </div>
+
+            <!-- Recent Posts -->
+            <div class="sidebar-widget animate-on-scroll" id="recent-posts-widget">
+                <h4><i class="fas fa-clock" style="margin-right:8px;color:var(--blue-400)"></i>Recent Posts</h4>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="sidebar-widget newsletter-widget animate-on-scroll">
+                <h4><i class="fas fa-envelope" style="margin-right:8px"></i>Newsletter</h4>
+                <p>Get the latest tech news and exclusive deals delivered to your inbox weekly.</p>
+                <form class="newsletter-form" onsubmit="event.preventDefault(); showToast('Subscribed successfully!','success'); this.reset();">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit"><i class="fas fa-paper-plane" style="margin-right:6px"></i>Subscribe</button>
+                </form>
+            </div>
+        </aside>
+
+    </div>
+</section>
+
+<div id="footer-placeholder"></div>
+
+<script src="shared.js"></script>
+<script>
+const blogArticles = [
+    {
+        id: 1,
+        title: "iPhone 15 Pro Max vs Samsung Galaxy S24 Ultra: Which Flagship Wins in Nigeria?",
+        excerpt: "We compare the two most popular flagships in the Nigerian market on performance, camera, battery, and value for money.",
+        fullContent: "<p>The battle between Apple and Samsung continues to heat up in Nigeria's premium smartphone market. With both devices commanding prices above " + formatPrice(1500000) + ", choosing the right one matters more than ever.</p><p>The iPhone 15 Pro Max brings the A17 Pro chip, offering console-level gaming and best-in-class video recording. Meanwhile, Samsung's Galaxy S24 Ultra leads with its S Pen integration and Galaxy AI features including Circle to Search and Live Translate — particularly useful for Nigeria's multilingual users.</p><p>In our month-long testing across Lagos, the S24 Ultra edged out in battery life during hot weather conditions, while the iPhone maintained more consistent camera performance. Both offer excellent build quality with titanium frames.</p>",
+        category: "Smartphones",
+        date: "Mar 20, 2026",
+        author: "Chinedu Okafor",
+        image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&q=80"
+    },
+    {
+        id: 2,
+        title: "Best Budget Laptops for Nigerian Students in 2026",
+        excerpt: "From coding to design, these laptops offer the best performance under " + formatPrice(500000) + " for students and young professionals.",
+        fullContent: "<p>Finding a reliable laptop that won't break the bank is crucial for Nigerian students. With the current exchange rate, many international brands have become significantly more expensive, making smart purchasing decisions essential.</p><p>Our top picks include the Lenovo IdeaPad Slim 3 (around " + formatPrice(350000) + ") which offers solid build quality and decent performance for everyday tasks. For those who need more power, the ASUS VivoBook 15 provides dedicated graphics at a competitive price point.</p><p>Key considerations for the Nigerian market include power efficiency (given inconsistent power supply), display brightness for outdoor use, and after-sales service availability. We recommend purchasing from authorized retailers in Computer Village or verified online stores to ensure warranty coverage.</p>",
+        category: "Laptops",
+        date: "Mar 15, 2026",
+        author: "Amina Ibrahim",
+        image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&q=80"
+    },
+    {
+        id: 3,
+        title: "How to Set Up Your Smart Home in Lagos: A Complete Guide",
+        excerpt: "Turn your Lagos apartment into a smart home with these affordable devices and tips for dealing with Nigeria's unique power challenges.",
+        fullContent: "<p>Smart home technology is rapidly gaining popularity in Nigeria, especially in urban areas like Lagos, Abuja, and Port Harcourt. However, setting up a smart home here comes with unique challenges — primarily power supply inconsistency and internet reliability.</p><p>Start with the essentials: smart plugs (around " + formatPrice(15000) + " each) that can help you monitor power consumption and automate devices. Pair them with a reliable UPS to keep your smart hub running during outages. Smart bulbs from brands like TP-Link and Philips Hue offer easy entry points.</p><p>For security, consider Wi-Fi cameras that store footage locally on SD cards — this way, you won't lose footage during internet outages. We also recommend investing in a portable solar-powered backup for your router and smart hub.</p>",
+        category: "Tips & Guides",
+        date: "Mar 10, 2026",
+        author: "Tunde Adeyemi",
+        image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&q=80"
+    },
+    {
+        id: 4,
+        title: "Sony WH-1000XM5 Review: Worth the Price in Nigeria?",
+        excerpt: "We tested Sony's flagship noise-cancelling headphones for 30 days. Here's our honest review for Nigerian buyers.",
+        fullContent: "<p>At " + formatPrice(449000) + ", the Sony WH-1000XM5 is a significant investment for most Nigerian buyers. After a full month of daily use — from crowded BRT rides to generator-noise-filled work-from-home sessions — here's our verdict.</p><p>The noise cancellation is nothing short of exceptional. It handles the unique sound profile of Nigerian urban life remarkably well: generator hum, traffic noise, and even the persistent horn-blowing on Third Mainland Bridge become distant murmurs. The 30-hour battery life means you can go almost a full work week without charging.</p><p>Sound quality is warm and balanced, though audiophiles might prefer slightly more treble detail. The multipoint connection lets you switch between your phone and laptop seamlessly — perfect for those who juggle calls and music throughout the day.</p>",
+        category: "Audio",
+        date: "Mar 5, 2026",
+        author: "Kemi Adesanya",
+        image: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=600&q=80"
+    },
+    {
+        id: 5,
+        title: "5G in Nigeria: What You Need to Know Before Buying a 5G Phone",
+        excerpt: "MTN and Airtel are rolling out 5G, but should you rush to buy a 5G device? We break down coverage, speeds, and value.",
+        fullContent: "<p>With MTN and Airtel actively expanding their 5G networks in Nigeria, the question on many tech enthusiasts' minds is whether it's time to upgrade. The short answer: it depends on where you live and how you use your phone.</p><p>Currently, 5G coverage is concentrated in select areas of Lagos, Abuja, and a few other major cities. If you're in Lekki, Victoria Island, or Ikoyi, you'll likely get decent 5G speeds. But venture to the mainland or suburban areas, and you're back on 4G.</p><p>Our speed tests showed downloads of 200-400 Mbps in strong 5G zones — impressive for Nigeria. However, most daily activities like WhatsApp, social media, and even HD video streaming work perfectly fine on 4G. Our advice: if you're buying a new phone anyway, get one with 5G support for future-proofing, but don't upgrade solely for 5G just yet.</p>",
+        category: "Industry News",
+        date: "Feb 28, 2026",
+        author: "Emeka Nwosu",
+        image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&q=80"
+    },
+    {
+        id: 6,
+        title: "GoPro vs DJI Action Camera: Which is Best for Nigerian Content Creators?",
+        excerpt: "Content creation is booming in Nigeria. We compare two top action cameras for vloggers, filmmakers, and travel creators.",
+        fullContent: "<p>Nigeria's content creation scene is exploding, from travel vloggers exploring hidden gems in Calabar to food creators documenting Lagos street food culture. An action camera is increasingly essential gear, and two brands dominate: GoPro and DJI.</p><p>The GoPro Hero 12 Black (" + formatPrice(529000) + ") remains the industry standard with its proven HyperSmooth stabilization and robust waterproofing. The DJI Osmo Action 4, priced slightly lower, fights back with a larger sensor and magnetic mounting system.</p><p>For Nigerian creators specifically, we lean toward the GoPro for its wider accessory ecosystem available locally and better performance in bright outdoor conditions — important given our tropical sunlight. However, if low-light vlogging is your thing (markets at dusk, nightlife content), the DJI's larger sensor gives it an edge.</p>",
+        category: "Cameras",
+        date: "Feb 22, 2026",
+        author: "Funmi Olayinka",
+        image: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=600&q=80"
+    }
+];
+
+function renderBlog() {
+    const grid = document.getElementById('blog-grid');
+    grid.innerHTML = blogArticles.map((article, i) => `
+        <div class="blog-card animate-on-scroll" style="animation-delay:${i * 0.08}s" data-article-id="${article.id}">
+            <div class="blog-card-image">
+                <img src="${article.image}" alt="${article.title}" loading="lazy">
+                <span class="blog-card-category">${article.category}</span>
+            </div>
+            <div class="blog-card-body">
+                <div class="blog-card-meta">
+                    <span><i class="fas fa-calendar-alt"></i>${article.date}</span>
+                    <span><i class="fas fa-user"></i>${article.author}</span>
+                </div>
+                <h3>${article.title}</h3>
+                <p class="blog-card-excerpt">${article.excerpt}</p>
+                <button class="read-more-btn" onclick="toggleArticle(${article.id})">
+                    Read More <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            <div class="blog-card-full" id="article-full-${article.id}">
+                ${article.fullContent}
+                <button class="close-article" onclick="toggleArticle(${article.id})">
+                    <i class="fas fa-chevron-up"></i> Close Article
+                </button>
+            </div>
+        </div>
+    `).join('');
+
+    // Render recent posts in sidebar
+    const recentWidget = document.getElementById('recent-posts-widget');
+    const recentHTML = blogArticles.slice(0, 4).map(a => `
+        <div class="recent-post">
+            <div class="recent-post-img"><img src="${a.image}" alt="${a.title}" loading="lazy"></div>
+            <div class="recent-post-info">
+                <h5 onclick="toggleArticle(${a.id}); document.querySelector('[data-article-id=\\'${a.id}\\']').scrollIntoView({behavior:'smooth',block:'center'})">${a.title}</h5>
+                <span><i class="fas fa-calendar-alt" style="margin-right:4px"></i>${a.date}</span>
+            </div>
+        </div>
+    `).join('');
+    recentWidget.innerHTML = recentWidget.querySelector('h4').outerHTML + recentHTML;
+
+    // Re-init scroll animations for dynamically added elements
+    initScrollAnimations();
+}
+
+function toggleArticle(id) {
+    const el = document.getElementById('article-full-' + id);
+    const card = el.closest('.blog-card');
+    const btn = card.querySelector('.read-more-btn');
+
+    if (el.classList.contains('expanded')) {
+        el.classList.remove('expanded');
+        btn.innerHTML = 'Read More <i class="fas fa-arrow-right"></i>';
+    } else {
+        // Close any other open articles
+        document.querySelectorAll('.blog-card-full.expanded').forEach(other => {
+            other.classList.remove('expanded');
+            other.closest('.blog-card').querySelector('.read-more-btn').innerHTML = 'Read More <i class="fas fa-arrow-right"></i>';
+        });
+        el.classList.add('expanded');
+        btn.innerHTML = 'Read Less <i class="fas fa-chevron-up"></i>';
+    }
+}
+
+// Search functionality
+document.addEventListener('DOMContentLoaded', function() {
+    renderBlog();
+
+    const searchInput = document.getElementById('blog-search-input');
+    const searchBtn = document.getElementById('blog-search-btn');
+
+    function searchArticles() {
+        const q = searchInput.value.toLowerCase().trim();
+        document.querySelectorAll('.blog-card').forEach(card => {
+            const id = +card.dataset.articleId;
+            const article = blogArticles.find(a => a.id === id);
+            const matches = !q || article.title.toLowerCase().includes(q) || article.excerpt.toLowerCase().includes(q) || article.category.toLowerCase().includes(q);
+            card.style.display = matches ? '' : 'none';
+        });
+    }
+
+    searchBtn.addEventListener('click', searchArticles);
+    searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') searchArticles(); });
+});
+</script>
+</body>
+</html>

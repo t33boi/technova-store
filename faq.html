@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ | TechNova Nigeria</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Hero Banner */
+        .faq-hero {
+            background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 50%, var(--blue-500) 100%);
+            padding: 80px 0 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .faq-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .faq-hero h1 {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 12px;
+        }
+        .faq-hero .breadcrumb {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            color: var(--gray-300);
+            font-size: 0.95rem;
+        }
+        .faq-hero .breadcrumb a { color: var(--blue-300); }
+        .faq-hero .breadcrumb a:hover { color: var(--white); }
+
+        /* Search Bar */
+        .faq-search-section {
+            padding: 40px 0 0;
+        }
+        .faq-search-wrapper {
+            max-width: 650px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .faq-search-wrapper input {
+            width: 100%;
+            padding: 16px 20px 16px 52px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            color: var(--gray-800);
+            background: var(--white);
+            box-shadow: var(--shadow-md);
+            outline: none;
+            transition: all var(--transition);
+            font-family: inherit;
+        }
+        .faq-search-wrapper input:focus {
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.1), var(--shadow-md);
+        }
+        .faq-search-wrapper input::placeholder { color: var(--gray-400); }
+        .faq-search-wrapper .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 1.1rem;
+            pointer-events: none;
+        }
+        .faq-search-wrapper .search-clear {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 1rem;
+            display: none;
+            padding: 4px;
+            transition: color var(--transition);
+        }
+        .faq-search-wrapper .search-clear:hover { color: var(--gray-700); }
+        .faq-search-wrapper .search-clear.show { display: block; }
+
+        /* Category Tabs */
+        .faq-tabs-section {
+            padding: 30px 0 0;
+        }
+        .faq-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .faq-tab {
+            padding: 10px 22px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--gray-600);
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            transition: all var(--transition);
+            font-family: inherit;
+        }
+        .faq-tab:hover {
+            border-color: var(--blue-400);
+            color: var(--blue-500);
+        }
+        .faq-tab.active {
+            background: var(--blue-500);
+            color: var(--white);
+            border-color: var(--blue-500);
+        }
+
+        /* FAQ Content */
+        .faq-content-section {
+            padding: 40px 0 80px;
+        }
+        .faq-category {
+            margin-bottom: 40px;
+        }
+        .faq-category-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--navy-900);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .faq-category-title i {
+            color: var(--blue-500);
+            font-size: 1.1rem;
+        }
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .faq-item {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+            transition: all var(--transition);
+        }
+        .faq-item:hover { border-color: var(--blue-300); }
+        .faq-item.active { border-color: var(--blue-500); box-shadow: 0 2px 12px rgba(37,99,235,0.1); }
+        .faq-question {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 24px;
+            font-weight: 600;
+            color: var(--gray-800);
+            font-size: 1rem;
+            width: 100%;
+            text-align: left;
+            gap: 16px;
+            font-family: inherit;
+            transition: color var(--transition);
+        }
+        .faq-question:hover { color: var(--blue-500); }
+        .faq-item.active .faq-question { color: var(--blue-500); }
+        .faq-question .faq-toggle {
+            width: 30px;
+            height: 30px;
+            min-width: 30px;
+            border-radius: 50%;
+            background: var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            transition: all var(--transition);
+        }
+        .faq-item.active .faq-toggle {
+            background: var(--blue-500);
+            color: var(--white);
+            transform: rotate(180deg);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .faq-answer-inner {
+            padding: 0 24px 20px;
+            color: var(--gray-500);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+        .faq-answer-inner a { color: var(--blue-500); font-weight: 500; }
+        .faq-answer-inner a:hover { text-decoration: underline; }
+
+        /* No results */
+        .faq-no-results {
+            text-align: center;
+            padding: 60px 20px;
+            display: none;
+        }
+        .faq-no-results.show { display: block; }
+        .faq-no-results i {
+            font-size: 3rem;
+            color: var(--gray-300);
+            margin-bottom: 16px;
+        }
+        .faq-no-results h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+        .faq-no-results p { color: var(--gray-500); }
+
+        /* Contact CTA */
+        .faq-cta {
+            background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 100%);
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .faq-cta::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(37,99,235,0.15), transparent 70%);
+            top: -150px;
+            right: -100px;
+            border-radius: 50%;
+        }
+        .faq-cta h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 10px;
+        }
+        .faq-cta p {
+            color: var(--gray-400);
+            max-width: 500px;
+            margin: 0 auto 28px;
+        }
+        .faq-cta .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .faq-cta .btn-cta {
+            padding: 14px 32px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all var(--transition);
+        }
+        .faq-cta .btn-cta-primary {
+            background: var(--blue-500);
+            color: var(--white);
+        }
+        .faq-cta .btn-cta-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(37,99,235,0.4);
+        }
+        .faq-cta .btn-cta-outline {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        .faq-cta .btn-cta-outline:hover {
+            border-color: var(--white);
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .animate-on-scroll.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .faq-hero { padding: 60px 0 40px; }
+            .faq-question { padding: 15px 18px; font-size: 0.93rem; }
+            .faq-answer-inner { padding: 0 18px 16px; }
+            .faq-tabs { gap: 8px; }
+            .faq-tab { padding: 8px 16px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <!-- Hero Banner -->
+    <section class="faq-hero">
+        <div class="container">
+            <h1>Frequently Asked Questions</h1>
+            <div class="breadcrumb">
+                <a href="index.html">Home</a>
+                <span>/</span>
+                <span>FAQ</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search -->
+    <section class="faq-search-section">
+        <div class="container">
+            <div class="faq-search-wrapper animate-on-scroll">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="faq-search" placeholder="Search for answers...">
+                <button class="search-clear" id="search-clear"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Tabs -->
+    <section class="faq-tabs-section">
+        <div class="container">
+            <div class="faq-tabs animate-on-scroll">
+                <button class="faq-tab active" data-category="all">All</button>
+                <button class="faq-tab" data-category="ordering"><i class="fas fa-shopping-bag"></i> Ordering</button>
+                <button class="faq-tab" data-category="shipping"><i class="fas fa-truck"></i> Shipping</button>
+                <button class="faq-tab" data-category="returns"><i class="fas fa-undo-alt"></i> Returns</button>
+                <button class="faq-tab" data-category="payment"><i class="fas fa-credit-card"></i> Payment</button>
+                <button class="faq-tab" data-category="products"><i class="fas fa-box"></i> Products</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Content -->
+    <section class="faq-content-section">
+        <div class="container">
+            <div id="faq-container">
+
+                <!-- Ordering -->
+                <div class="faq-category animate-on-scroll" data-category="ordering">
+                    <div class="faq-category-title"><i class="fas fa-shopping-bag"></i> Ordering</div>
+                    <div class="faq-list">
+                        <div class="faq-item" data-category="ordering">
+                            <button class="faq-question">
+                                How do I place an order on TechNova?
+                                <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                            </button>
+                            <div class="faq-answer"><div class="faq-answer-inner">
+                                Simply browse our store, add items to your cart, and proceed to checkout. You can shop as a guest or create an account for a faster experience next time. Once you've entered your delivery details and chosen a payment method, confirm your order and you'll receive an email confirmation with your order number.
+                            </div></div>
+                        </div>
+                        <div class="faq-item" data-category="ordering">
+                            <button class="faq-question">
+                                Can I modify or cancel my order after placing it?
+                                <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                            </button>
+                            <div class="faq-answer"><div class="faq-answer-inner">
+                                Yes, you can modify or cancel your order within 1 hour of placing it. After that, the order enters processing and cannot be changed. Contact our support team at <a href="tel:+2348123456789">+234 812 345 6789</a> or email <a href="mailto:support@technova.ng">support@technova.ng</a> as soon as possible if you need to make changes.
+                            </div></div>
+                        </div>
+                        <div class="faq-item" data-category="ordering">
+                            <button class="faq-question">
+                                Is there a minimum order amount?
+                                <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                            </button>
+                            <div class="faq-answer"><div class="faq-answer-inner">
+                                No, there is no minimum order amount. You can purchase any single item from our store. However, orders above &#8358;50,000 qualify for free delivery within Lagos, and orders above &#8358;100,000 get free nationwide delivery.
+                            </div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping -->
+                <div class="faq-category animate-on-scroll" data-category="shipping">
+                    <div class="faq-category-title"><i class="fas fa-truck"></i> Shipping & Delivery</div>
+                    <div class="faq-list">
+                        <div class="faq-item" data-category="shipping">
+                            <button class="faq-question">
+                                How long does delivery take?
+                                <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                            </button>
+                            <div class="faq-answer"><div class="faq-answer-inner">
+                                Delivery within Lagos takes 1-2 business days. For other states in Southwest Nigeria, it takes 2-3 business days. Nationwide delivery to all other states typically takes 3-5 business days. You'll receive a tracking number via SMS and email once your order is shipped.
+                            </div></div>
+                        </div>
+                        <div class="faq-item" data-category="shipping">
+                            <button class="faq-question">
+                                How much does shipping cost?
+                                <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                            </button>
+                            <div class="faq-answer"><div class="faq-answer-inner">
+                                Shipping within Lagos starts at &#8358;1,500. Delivery to other Southwest states is &#8358;2,500, and nationwide delivery ranges from &#8358;3,000 to &#8358;5,000 depending on the location and package weight. Orders above &#8358;50,000 enjoy free delivery within Lagos, and orders above &#8358;100,000 get free nationwide delivery.
+                            </div></div>
+                        </div>
+                        <div class="faq-item" data-category="shipping">
+                            <button class="faq-question">
+                                Can I track my order?
+                                <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                            </button>
+                            <div class="faq-answer"><div class="faq-answer-inner">
+                                Absolutely! Once your order is dispatched, you'll receive a tracking number via SMS and email. You can use this to track your package in real time through our website or the courier's tracking portal. You can also contact our support team for live updates.
+                            </div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Returns -->
+                <div class="faq-category animate-on-scroll" data-category="returns">
+                    <div class="faq-category-title"><i class="fas fa-undo-alt"></i> Returns & Refunds</div>
+                    <div class="faq-list">
+                        <div class="faq-item" data-category="returns">
+                            <button class="faq-question">
+                                What is your return policy?
+                                <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                            </button>
+                            <div class="faq-answer"><div class="faq-answer-inner">
+                                We offer a 7-day return policy on all products. Items must be returned in their original packaging, unused, and with all accessories included. Once we receive and inspect the returned item, we'll process your refund within 3-5 business days. Please note that certain items like earphones and personal wearables may have specific hygiene-related return conditions.
+                            </div></div>
+                        </div>
+                        <div class="faq-item" data-category="returns">
+                            <button class="faq-question">
+                                How do I initiate a return?
+                                <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                            </button>
+                            <div class="faq-answer"><div class="faq-answer-inner">
+                                To initiate a return, email <a href="mailto:returns@technova.ng">returns@technova.ng</a> with your order number, reason for return, and a photo of the product. Our team will review your request within 24 hours and provide you with a return shipping label. For items received damaged or defective, we cover all return shipping costs.
+                            </div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment -->
+                <div class="faq-category animate-on-scroll" data-category="payment">
+                    <div class="faq-category-title"><i class="fas fa-credit-card"></i> Payment</div>
+                    <div class="faq-list">
+                        <div class="faq-item" data-category="payment">
+                            <button class="faq-question">
+                                What payment methods do you accept?
+                                <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                            </button>
+                            <div class="faq-answer"><div class="faq-answer-inner">
+                                We accept a wide range of payment methods including: Debit/Credit cards (Visa, Mastercard, Verve), Bank transfers, USSD payments, Paystack, Flutterwave, and Cash on Delivery (available in Lagos, Abuja, and Port Harcourt). All online payments are secured with SSL encryption.
+                            </div></div>
+                        </div>
+                        <div class="faq-item" data-category="payment">
+                            <button class="faq-question">
+                                Is it safe to pay online on TechNova?
+                                <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                            </button>
+                            <div class="faq-answer"><div class="faq-answer-inner">
+                                Yes, absolutely. We use Paystack and Flutterwave, both of which are PCI DSS compliant payment processors. Your card details are never stored on our servers. All transactions are encrypted with 256-bit SSL security, and we support 3D Secure authentication for an extra layer of protection.
+                            </div></div>
+                        </div>
+                        <div class="faq-item" data-category="payment">
+                            <button class="faq-question">
+                                Do you offer instalment payments or buy-now-pay-later?
+                                <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                            </button>
+                            <div class="faq-answer"><div class="faq-answer-inner">
+                                Yes! We partner with Carbon and Specta to offer instalment payment options on qualifying orders above &#8358;100,000. You can spread your payment over 3-6 months with competitive interest rates. Select the instalment option at checkout to see if you qualify.
+                            </div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products -->
+                <div class="faq-category animate-on-scroll" data-category="products">
+                    <div class="faq-category-title"><i class="fas fa-box"></i> Products</div>
+                    <div class="faq-list">
+                        <div class="faq-item" data-category="products">
+                            <button class="faq-question">
+                                Are all products on TechNova original and authentic?
+                                <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                            </button>
+                            <div class="faq-answer"><div class="faq-answer-inner">
+                                Yes, 100%. We source all our products directly from authorised distributors and brand partners. Every item comes with a manufacturer's warranty. We have a zero-tolerance policy for counterfeit products. If you ever suspect a product isn't authentic, contact us immediately and we'll investigate and refund you.
+                            </div></div>
+                        </div>
+                        <div class="faq-item" data-category="products">
+                            <button class="faq-question">
+                                Do your products come with warranty?
+                                <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                            </button>
+                            <div class="faq-answer"><div class="faq-answer-inner">
+                                All products on TechNova come with the manufacturer's official warranty, which typically ranges from 6 months to 2 years depending on the brand and product category. Additionally, we offer an optional TechNova Extended Care plan that extends your warranty by an additional 12 months for a small fee.
+                            </div></div>
+                        </div>
+                        <div class="faq-item" data-category="products">
+                            <button class="faq-question">
+                                Can I request a product that's not listed on your store?
+                                <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                            </button>
+                            <div class="faq-answer"><div class="faq-answer-inner">
+                                Of course! If there's a specific gadget or tech product you're looking for that isn't on our site, send us a request via email at <a href="mailto:hello@technova.ng">hello@technova.ng</a> or WhatsApp us at <a href="https://wa.me/2348123456789">+234 812 345 6789</a>. We'll do our best to source it for you through our supplier network, usually within 5-10 business days.
+                            </div></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- No Results -->
+            <div class="faq-no-results" id="faq-no-results">
+                <i class="fas fa-search"></i>
+                <h3>No results found</h3>
+                <p>Try a different search term or browse by category.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section class="faq-cta">
+        <div class="container animate-on-scroll">
+            <h2>Still Have Questions?</h2>
+            <p>Our friendly support team is always ready to help you with any queries.</p>
+            <div class="cta-buttons">
+                <a href="contact.html" class="btn-cta btn-cta-primary"><i class="fas fa-envelope"></i> Contact Us</a>
+                <a href="tel:+2348123456789" class="btn-cta btn-cta-outline"><i class="fas fa-phone-alt"></i> +234 812 345 6789</a>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="shared.js"></script>
+    <script>
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.parentElement;
+                const answer = item.querySelector('.faq-answer');
+                const inner = answer.querySelector('.faq-answer-inner');
+                const isActive = item.classList.contains('active');
+
+                // Close all others
+                document.querySelectorAll('.faq-item.active').forEach(other => {
+                    if (other !== item) {
+                        other.classList.remove('active');
+                        other.querySelector('.faq-answer').style.maxHeight = '0';
+                    }
+                });
+
+                // Toggle current
+                if (isActive) {
+                    item.classList.remove('active');
+                    answer.style.maxHeight = '0';
+                } else {
+                    item.classList.add('active');
+                    answer.style.maxHeight = inner.scrollHeight + 20 + 'px';
+                }
+            });
+        });
+
+        // Category Tabs
+        document.querySelectorAll('.faq-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.faq-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                const cat = tab.dataset.category;
+                filterFAQs(document.getElementById('faq-search').value, cat);
+            });
+        });
+
+        // Search
+        const searchInput = document.getElementById('faq-search');
+        const searchClear = document.getElementById('search-clear');
+
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.trim();
+            searchClear.classList.toggle('show', query.length > 0);
+            const activeCat = document.querySelector('.faq-tab.active').dataset.category;
+            filterFAQs(query, activeCat);
+        });
+
+        searchClear.addEventListener('click', () => {
+            searchInput.value = '';
+            searchClear.classList.remove('show');
+            const activeCat = document.querySelector('.faq-tab.active').dataset.category;
+            filterFAQs('', activeCat);
+            searchInput.focus();
+        });
+
+        function filterFAQs(query, category) {
+            const q = query.toLowerCase();
+            let visibleCount = 0;
+
+            document.querySelectorAll('.faq-category').forEach(catEl => {
+                const catName = catEl.dataset.category;
+                const showCat = category === 'all' || catName === category;
+
+                if (!showCat) {
+                    catEl.style.display = 'none';
+                    return;
+                }
+
+                let catVisible = false;
+                catEl.querySelectorAll('.faq-item').forEach(item => {
+                    const questionText = item.querySelector('.faq-question').textContent.toLowerCase();
+                    const answerText = item.querySelector('.faq-answer-inner').textContent.toLowerCase();
+                    const matches = !q || questionText.includes(q) || answerText.includes(q);
+                    item.style.display = matches ? '' : 'none';
+                    if (matches) { catVisible = true; visibleCount++; }
+                });
+
+                catEl.style.display = catVisible ? '' : 'none';
+            });
+
+            document.getElementById('faq-no-results').classList.toggle('show', visibleCount === 0);
+        }
+    </script>
+</body>
+</html>

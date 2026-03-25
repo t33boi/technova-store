@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | TechNova Nigeria</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Hero Banner */
+        .contact-hero {
+            background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 50%, var(--blue-500) 100%);
+            padding: 80px 0 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .contact-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .contact-hero h1 {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 12px;
+        }
+        .contact-hero .breadcrumb {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            color: var(--gray-300);
+            font-size: 0.95rem;
+        }
+        .contact-hero .breadcrumb a { color: var(--blue-300); }
+        .contact-hero .breadcrumb a:hover { color: var(--white); }
+
+        /* Contact Content */
+        .contact-section { padding: 80px 0; }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        /* Contact Form */
+        .contact-form-wrapper {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+        }
+        .contact-form-wrapper h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--navy-900);
+            margin-bottom: 6px;
+        }
+        .contact-form-wrapper > p {
+            color: var(--gray-500);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 6px;
+            font-size: 0.92rem;
+        }
+        .form-group label .required { color: var(--accent-red); }
+        .form-control {
+            width: 100%;
+            padding: 13px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            color: var(--gray-800);
+            background: var(--gray-50);
+            transition: all var(--transition);
+            outline: none;
+            font-family: inherit;
+        }
+        .form-control:focus {
+            border-color: var(--blue-500);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
+        }
+        .form-control.error { border-color: var(--accent-red); }
+        .form-control.error:focus { box-shadow: 0 0 0 4px rgba(239,68,68,0.1); }
+        .error-text {
+            color: var(--accent-red);
+            font-size: 0.82rem;
+            margin-top: 4px;
+            display: none;
+        }
+        .error-text.show { display: block; }
+        textarea.form-control { resize: vertical; min-height: 130px; }
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 15px 28px;
+            background: var(--blue-500);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all var(--transition);
+            font-family: inherit;
+        }
+        .submit-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(37,99,235,0.4);
+        }
+        .submit-btn:active { transform: translateY(0); }
+
+        /* Contact Info */
+        .contact-info-wrapper h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--navy-900);
+            margin-bottom: 6px;
+        }
+        .contact-info-wrapper > p {
+            color: var(--gray-500);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+        .info-cards {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .info-card {
+            display: flex;
+            gap: 18px;
+            padding: 24px;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+            transition: all var(--transition);
+        }
+        .info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--blue-400);
+        }
+        .info-card-icon {
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, rgba(37,99,235,0.1), rgba(0,180,255,0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--blue-500);
+            transition: all var(--transition);
+        }
+        .info-card:hover .info-card-icon {
+            background: linear-gradient(135deg, var(--blue-500), var(--electric));
+            color: var(--white);
+        }
+        .info-card h4 {
+            font-size: 1.02rem;
+            font-weight: 700;
+            color: var(--navy-900);
+            margin-bottom: 4px;
+        }
+        .info-card p, .info-card a {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .info-card a:hover { color: var(--blue-500); }
+
+        /* Map */
+        .map-wrapper {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+        }
+        .map-wrapper iframe {
+            width: 100%;
+            height: 280px;
+            border: none;
+            display: block;
+        }
+
+        /* Animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .animate-on-scroll.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .contact-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .contact-hero { padding: 60px 0 40px; }
+            .form-row { grid-template-columns: 1fr; }
+            .contact-form-wrapper { padding: 28px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <!-- Hero Banner -->
+    <section class="contact-hero">
+        <div class="container">
+            <h1>Contact Us</h1>
+            <div class="breadcrumb">
+                <a href="index.html">Home</a>
+                <span>/</span>
+                <span>Contact</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Content -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="contact-grid">
+                <!-- Contact Form -->
+                <div class="contact-form-wrapper animate-on-scroll">
+                    <h2>Send Us a Message</h2>
+                    <p>Fill out the form below and we'll get back to you within 24 hours.</p>
+                    <form id="contact-form" novalidate>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Full Name <span class="required">*</span></label>
+                                <input type="text" class="form-control" id="contact-name" placeholder="Enter your full name">
+                                <div class="error-text" id="name-error">Please enter your name</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Email Address <span class="required">*</span></label>
+                                <input type="email" class="form-control" id="contact-email" placeholder="you@example.com">
+                                <div class="error-text" id="email-error">Please enter a valid email</div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" class="form-control" id="contact-phone" placeholder="+234 800 000 0000">
+                                <div class="error-text" id="phone-error">Please enter a valid phone number</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Subject <span class="required">*</span></label>
+                                <select class="form-control" id="contact-subject">
+                                    <option value="">Select a subject</option>
+                                    <option value="general">General Inquiry</option>
+                                    <option value="order">Order Support</option>
+                                    <option value="returns">Returns & Refunds</option>
+                                    <option value="technical">Technical Support</option>
+                                    <option value="partnership">Business Partnership</option>
+                                    <option value="complaint">Complaint</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <div class="error-text" id="subject-error">Please select a subject</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Message <span class="required">*</span></label>
+                            <textarea class="form-control" id="contact-message" placeholder="Tell us how we can help you..."></textarea>
+                            <div class="error-text" id="message-error">Please enter your message (min. 10 characters)</div>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="contact-info-wrapper">
+                    <h2>Get in Touch</h2>
+                    <p>We'd love to hear from you. Reach out through any of these channels.</p>
+
+                    <div class="info-cards">
+                        <div class="info-card animate-on-scroll">
+                            <div class="info-card-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div>
+                                <h4>Visit Our Store</h4>
+                                <p>15 Admiralty Way, Lekki Phase 1,<br>Lagos, Nigeria</p>
+                            </div>
+                        </div>
+                        <div class="info-card animate-on-scroll">
+                            <div class="info-card-icon"><i class="fas fa-phone-alt"></i></div>
+                            <div>
+                                <h4>Call Us</h4>
+                                <p><a href="tel:+2348123456789">+234 812 345 6789</a><br><a href="tel:+2349012345678">+234 901 234 5678</a></p>
+                            </div>
+                        </div>
+                        <div class="info-card animate-on-scroll">
+                            <div class="info-card-icon"><i class="fas fa-envelope"></i></div>
+                            <div>
+                                <h4>Email Us</h4>
+                                <p><a href="mailto:hello@technova.ng">hello@technova.ng</a><br><a href="mailto:support@technova.ng">support@technova.ng</a></p>
+                            </div>
+                        </div>
+                        <div class="info-card animate-on-scroll">
+                            <div class="info-card-icon"><i class="fas fa-clock"></i></div>
+                            <div>
+                                <h4>Business Hours</h4>
+                                <p>Mon - Fri: 8:00 AM - 7:00 PM<br>Saturday: 9:00 AM - 5:00 PM<br>Sunday: 10:00 AM - 3:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Google Map -->
+                    <div class="map-wrapper animate-on-scroll">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.7286!2d3.4516!3d6.4281!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103bf53aec4dd92d%3A0x5e34a9c0c1b8e5f8!2sAdmiralty%20Way%2C%20Lekki%20Phase%201%2C%20Lagos!5e0!3m2!1sen!2sng!4v1700000000000" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="shared.js"></script>
+    <script>
+        // Form Validation
+        const form = document.getElementById('contact-form');
+
+        function validateField(id, errorId, condition) {
+            const field = document.getElementById(id);
+            const error = document.getElementById(errorId);
+            if (condition(field.value.trim())) {
+                field.classList.remove('error');
+                error.classList.remove('show');
+                return true;
+            } else {
+                field.classList.add('error');
+                error.classList.add('show');
+                return false;
+            }
+        }
+
+        // Remove error on input
+        ['contact-name', 'contact-email', 'contact-phone', 'contact-subject', 'contact-message'].forEach(id => {
+            const el = document.getElementById(id);
+            el.addEventListener('input', () => {
+                el.classList.remove('error');
+                const errEl = document.getElementById(id.replace('contact-', '') + '-error');
+                if (errEl) errEl.classList.remove('show');
+            });
+        });
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            let valid = true;
+
+            if (!validateField('contact-name', 'name-error', v => v.length >= 2)) valid = false;
+            if (!validateField('contact-email', 'email-error', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v))) valid = false;
+            if (!validateField('contact-subject', 'subject-error', v => v !== '')) valid = false;
+            if (!validateField('contact-message', 'message-error', v => v.length >= 10)) valid = false;
+
+            // Phone is optional but validate format if filled
+            const phone = document.getElementById('contact-phone').value.trim();
+            if (phone && !/^\+?[\d\s-]{7,15}$/.test(phone)) {
+                document.getElementById('contact-phone').classList.add('error');
+                document.getElementById('phone-error').classList.add('show');
+                valid = false;
+            }
+
+            if (valid) {
+                showToast('Message sent successfully! We\'ll get back to you within 24 hours.', 'success');
+                form.reset();
+            }
+        });
+    </script>
+</body>
+</html>
