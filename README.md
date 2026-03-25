@@ -6,7 +6,7 @@ A fully functional, multi-page ecommerce website for selling IT gadgets like pho
 
 ## 🌐 Live Demo
 
-[View on Vercel →](#)
+[View on Vercel →](https://technova-store.vercel.app/)
 
 ## ✨ Features
 
